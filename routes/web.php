@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -20,5 +21,7 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/api/province/{id}/cities', [App\Http\Controllers\HomeController::class, 'getCities'])->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/api/province/{id}/cities', [HomeController::class, 'getCities'])->name('home');
+
+Route::post('/api/cities', [HomeController::class, 'searchCities']);
