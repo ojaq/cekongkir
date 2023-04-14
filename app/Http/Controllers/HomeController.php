@@ -6,6 +6,7 @@ use App\Models\City;
 use App\Models\Courier;
 use App\Models\Province;
 use Illuminate\Http\Request;
+use Kavist\RajaOngkir\Facades\RajaOngkir;
 
 class HomeController extends Controller
 {
@@ -31,8 +32,38 @@ class HomeController extends Controller
         return view('home', compact('province', 'courier'));
     }
 
+    // public function store(Request $request){
+    //     // dd($request->all());
+
+    //     // $cost = RajaOngkir::ongkosKirim([
+    //     //     'origin'        => $request->city_origin,
+    //     //     'destination'   => $request->destination,
+    //     //     'weight'        => 1300,
+    //     //     'courier'       => $request->courier[0]
+    //     // ])->get();
+
+    //     // dd($cost);
+    // }
+
     public function store(Request $request){
-        dd($request->all());
+        // dd($request->all());
+
+        $courier = $request->input('courier');
+
+        if ($courier) {
+            $result = [];
+
+            foreach ($courier as $value) {
+                $cost = RajaOngkir::ongkosKirim([
+                    'origin'        => $request->city_origin,
+                    'destination'   => $request->destination,
+                    'weight'        => 1300,
+                    'courier'       => $value
+                ])->get();
+                $result[] = $cost;
+            }
+            return $result;
+        }
     }
 
     public function getCourier(){
@@ -69,6 +100,5 @@ class HomeController extends Controller
         }
 
        return json_encode($response); 
-
     }
 }
